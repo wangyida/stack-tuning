@@ -1,8 +1,10 @@
 """
-Have fun with the number of epochs!
+    Copyright (c) 2017, Yida Wang
+    All rights reserved.
 
-Be warned that if you increase them too much,
-the VM will time out :)
+    Use of this source code is governed by a BSD-style license that can be found
+    in the LICENSE file.
+
 """
 
 import numpy as np
