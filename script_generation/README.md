@@ -32,6 +32,17 @@ NVIDIA requirements to run TensorFlow with GPU support
 
 `sudo apt-get install libcupti-dev`
 
+Install the nvidia drivers for Ubuntu (for 14.04 and newer), firstly add the graphics-drivers ppa:
+
+`sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt-get update`
+
+Then install the recommended driver
+
+`sudo ubuntu-drivers autoinstall`
+
+Then restart your system.
+
 Install CUDA 8, you can also find information on [Nvidia-CUDA](https://developer.nvidia.com/cuda-downloads) website.
 
 Downloading script:
