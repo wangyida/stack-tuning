@@ -115,18 +115,24 @@ On the remote machine, kill the IPython server with ctrl-c ctrl-c.
 
 ## Training Data
 
-[Training Data in json file](./images/training_data.png)
+![Training Data in json file](./images/training_data.png)
 
 ## Server Status
+Server Status of CPU
+![Server Status of CPU](./images/server_cpu.png)
 
-[Server Status of CPU](./images/server_cpu.png)
-
-[Server Status of GPU](./images/server_gpu.png)
+Server Status of GPU
+![Server Status of GPU](./images/server_gpu.png)
 
 ## Client
 
-[Input Definition](./images/client_input.png)
+Input Definition
+![Input Definition](./images/client_input.png)
 
-[GPU Information of Server](./images/client_server.png)
+GPU Information of Server
+![GPU Information of Server](./images/client_server.png)
 
-[Training Progress](./images/client_training_monitor.png)
+Training Progress
+![Training Progress](./images/client_training_monitor.png)
+
+Result
