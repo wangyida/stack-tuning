@@ -110,3 +110,23 @@ To close the SSH tunnel on the local machine, look for the process and kill it m
 Alternatively, you can start the tunnel without the -f option. The process will then remain in the foreground and can be killed with ctrl-c.
 
 On the remote machine, kill the IPython server with ctrl-c ctrl-c.
+
+# Platform Information
+
+## Training Data
+
+[Training Data in json file](./images/training_data.png)
+
+## Server Status
+
+[Server Status of CPU](./images/server_cpu.png)
+
+[Server Status of GPU](./images/server_gpu.png)
+
+## Client
+
+[Input Definition](./images/client_input.png)
+
+[GPU Information of Server](./images/client_server.png)
+
+[Training Progress](./images/client_training_monitor.png)
