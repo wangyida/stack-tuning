@@ -4,7 +4,9 @@
 # # Language Translation
 # In this project, you’re going to take a peek into the realm of neural network machine translation.  You’ll be training a sequence to sequence model on a dataset of English and French sentences that can translate new sentences from English to French.
 # ## Get the Data
-# Since translating the whole language of English to French will take lots of time to train, we have provided you with a small portion of the English corpus.
+# Since translating the whole language of English to French will take lots
+# of time to train, we have provided you with a small portion of the
+# English corpus.
 
 # In[12]:
 
@@ -43,27 +45,30 @@ print('Average number of words in a sentence: {}'.format(np.average(word_counts)
 
 print()
 print('English sentences {} to {}:'.format(*view_sentence_range))
-print('\n'.join(source_text.split('\n')[view_sentence_range[0]:view_sentence_range[1]]))
+print('\n'.join(source_text.split('\n')[
+      view_sentence_range[0]:view_sentence_range[1]]))
 print()
 print('French sentences {} to {}:'.format(*view_sentence_range))
-print('\n'.join(target_text.split('\n')[view_sentence_range[0]:view_sentence_range[1]]))
+print('\n'.join(target_text.split('\n')[
+      view_sentence_range[0]:view_sentence_range[1]]))
 
 
 # ## Implement Preprocessing Function
 # ### Text to Word Ids
 # As you did with other RNNs, you must turn the text into a number so the computer can understand it. In the function `text_to_ids()`, you'll turn `source_text` and `target_text` from words to ids.  However, you need to add the `<EOS>` word id at the end of each sentence from `target_text`.  This will help the neural network predict when the sentence should end.
-# 
+#
 # You can get the `<EOS>` word id by doing:
 # ```python
 # target_vocab_to_int['<EOS>']
 # ```
-# You can get other word ids using `source_vocab_to_int` and `target_vocab_to_int`.
+# You can get other word ids using `source_vocab_to_int` and
+# `target_vocab_to_int`.
 
 # In[3]:
 
-def text_to_ids(source_text, 
-                target_text, 
-                source_vocab_to_int, 
+def text_to_ids(source_text,
+                target_text,
+                source_vocab_to_int,
                 target_vocab_to_int):
     """
     Convert source and target text to proper word ids
@@ -75,17 +80,18 @@ def text_to_ids(source_text,
     """
     # Step 1: Seperating
     # This is designed for removing all EOF and spaces，
-    # this is will be a list of 2 loops with 
+    # this is will be a list of 2 loops with
     # form of [[...], [...],...[...]], all int inside!
-    
+
     source_id_text = [[source_vocab_to_int[w]
-                       for w in s.split()] 
+                       for w in s.split()]
                       for s in source_text.split('\n')]
-    target_id_text = [[target_vocab_to_int[w] 
-                       for w in s.split()] + [target_vocab_to_int['<EOS>']] 
+    target_id_text = [[target_vocab_to_int[w]
+                       for w in s.split()] + [target_vocab_to_int['<EOS>']]
                       for s in target_text.split('\n')]
-            
+
     return source_id_text, target_id_text
+
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -105,7 +111,9 @@ helper.preprocess_and_save_data(source_path, target_path, text_to_ids)
 
 
 # # Check Point
-# This is your first checkpoint. If you ever decide to come back to this notebook or have to restart the notebook, you can start from here. The preprocessed data has been saved to disk.
+# This is your first checkpoint. If you ever decide to come back to this
+# notebook or have to restart the notebook, you can start from here. The
+# preprocessed data has been saved to disk.
 
 # In[5]:
 
@@ -120,7 +128,8 @@ import helper
 
 
 # ### Check the Version of TensorFlow and Access to GPU
-# This will check to make sure you have the correct version of TensorFlow and access to a GPU
+# This will check to make sure you have the correct version of TensorFlow
+# and access to a GPU
 
 # In[6]:
 
@@ -134,15 +143,16 @@ import tensorflow as tf
 # Check TensorFlow Version
 assert LooseVersion(
     tf.__version__) in [
-        LooseVersion('1.0.0'), 
-        LooseVersion('1.0.1'), 
+        LooseVersion('1.0.0'),
+        LooseVersion('1.0.1'),
         LooseVersion('1.1.0')], 'Should be TF version 1.0  You are using {}'.format(
             tf.__version__)
 print('TensorFlow Version: {}'.format(tf.__version__))
 
 # Check for a GPU
 if not tf.test.gpu_device_name():
-    warnings.warn('No GPU found. Please use a GPU to train your neural network.')
+    warnings.warn(
+        'No GPU found. Please use a GPU to train your neural network.')
 else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
 
@@ -156,16 +166,17 @@ else:
 # - `decoding_layer_infer`
 # - `decoding_layer`
 # - `seq2seq_model`
-# 
+#
 # ### Input
 # Implement the `model_inputs()` function to create TF Placeholders for the Neural Network. It should create the following placeholders:
-# 
+#
 # - Input text placeholder named "input" using the TF Placeholder name parameter with rank 2.
 # - Targets placeholder with rank 2.
 # - Learning rate placeholder with rank 0.
 # - Keep probability placeholder named "keep_prob" using the TF Placeholder name parameter with rank 0.
-# 
-# Return the placeholders in the following the tuple (Input, Targets, Learing Rate, Keep Probability)
+#
+# Return the placeholders in the following the tuple (Input, Targets,
+# Learing Rate, Keep Probability)
 
 # In[7]:
 
@@ -180,6 +191,7 @@ def model_inputs():
     keep_prob = tf.placeholder(tf.float32, name='keep_prob')
     return input, target, learning_rate, keep_prob
 
+
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 """
@@ -187,12 +199,14 @@ tests.test_model_inputs(model_inputs)
 
 
 # ### Process Decoding Input
-# Implement `process_decoding_input` using TensorFlow to remove the last word id from each batch in `target_data` and concat the GO ID to the beginning of each batch.
+# Implement `process_decoding_input` using TensorFlow to remove the last
+# word id from each batch in `target_data` and concat the GO ID to the
+# beginning of each batch.
 
 # In[8]:
 
-def process_decoding_input(target_data, 
-                           target_vocab_to_int, 
+def process_decoding_input(target_data,
+                           target_vocab_to_int,
                            batch_size):
     """
     Preprocess target data for dencoding
@@ -200,7 +214,7 @@ def process_decoding_input(target_data,
     :param target_vocab_to_int: Dictionary to go from the target words to an id
     :param batch_size: Batch Size
     :return: Preprocessed target data
-    """    
+    """
     # Extracts a strided slice from a tensor.
     # To a first order, this operation extracts a slice of size `end - begin`
     # from a tensor `input`
@@ -209,15 +223,16 @@ def process_decoding_input(target_data,
     # Note that components of stride can be negative, which causes a reverse
     # slice.
     target_batches = tf.strided_slice(
-        target_data, 
-        [0,0], 
-        [batch_size, -1], 
-        [1,1])
+        target_data,
+        [0, 0],
+        [batch_size, -1],
+        [1, 1])
     dec_input = tf.concat(
-        [tf.fill([batch_size, 1], target_vocab_to_int['<GO>']), 
-        target_batches], 
+        [tf.fill([batch_size, 1], target_vocab_to_int['<GO>']),
+         target_batches],
         1)
     return dec_input
+
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -226,13 +241,14 @@ tests.test_process_decoding_input(process_decoding_input)
 
 
 # ### Encoding
-# Implement `encoding_layer()` to create a Encoder RNN layer using [`tf.nn.dynamic_rnn()`](https://www.tensorflow.org/api_docs/python/tf/nn/dynamic_rnn).
+# Implement `encoding_layer()` to create a Encoder RNN layer using
+# [`tf.nn.dynamic_rnn()`](https://www.tensorflow.org/api_docs/python/tf/nn/dynamic_rnn).
 
 # In[9]:
 
-def encoding_layer(rnn_inputs, 
-                   rnn_size, 
-                   num_layers, 
+def encoding_layer(rnn_inputs,
+                   rnn_size,
+                   num_layers,
                    keep_prob):
     """
     Create encoding layer
@@ -247,15 +263,16 @@ def encoding_layer(rnn_inputs,
     multi_cell = tf.contrib.rnn.MultiRNNCell([basic_cell] * num_layers)
     # Here we just add one dropout
     dropout_cell = tf.contrib.rnn.DropoutWrapper(
-        multi_cell, 
+        multi_cell,
         output_keep_prob=keep_prob)
     output_tensor, final_state = tf.nn.dynamic_rnn(
-        dropout_cell, 
-        rnn_inputs, 
+        dropout_cell,
+        rnn_inputs,
         dtype=tf.float32)
-    
+
     # Only return RNN state
     return final_state
+
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -264,16 +281,22 @@ tests.test_encoding_layer(encoding_layer)
 
 
 # ### Decoding - Training
-# Create training logits using [`tf.contrib.seq2seq.simple_decoder_fn_train()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/simple_decoder_fn_train) and [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder).  Apply the `output_fn` to the [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder) outputs.
+# Create training logits using
+# [`tf.contrib.seq2seq.simple_decoder_fn_train()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/simple_decoder_fn_train)
+# and
+# [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder).
+# Apply the `output_fn` to the
+# [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder)
+# outputs.
 
 # In[11]:
 
-def decoding_layer_train(encoder_state, 
-                         dec_cell, 
-                         dec_embed_input, 
-                         sequence_length, 
+def decoding_layer_train(encoder_state,
+                         dec_cell,
+                         dec_embed_input,
+                         sequence_length,
                          decoding_scope,
-                         output_fn, 
+                         output_fn,
                          keep_prob):
     """
     Create a decoding layer for training
@@ -287,21 +310,22 @@ def decoding_layer_train(encoder_state,
     :return: Train Logits
     """
     decoder_fn = tf.contrib.seq2seq.simple_decoder_fn_train(encoder_state)
-    
+
     # According to the decoder, we just need the outputs without states
     # final_state, final_context_state are ignored
     outputs, _, _ = tf.contrib.seq2seq.dynamic_rnn_decoder(
-        dec_cell, 
-        decoder_fn, 
-        dec_embed_input, 
-        sequence_length, 
+        dec_cell,
+        decoder_fn,
+        dec_embed_input,
+        sequence_length,
         scope=decoding_scope)
-    # It's recommended to use dropout in before output_fn() method. 
+    # It's recommended to use dropout in before output_fn() method.
     # This will decrease the number of computations.
     outputs = tf.nn.dropout(outputs, keep_prob)
     logits = output_fn(outputs)
-    
+
     return logits
+
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -310,19 +334,22 @@ tests.test_decoding_layer_train(decoding_layer_train)
 
 
 # ### Decoding - Inference
-# Create inference logits using [`tf.contrib.seq2seq.simple_decoder_fn_inference()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/simple_decoder_fn_inference) and [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder). 
+# Create inference logits using
+# [`tf.contrib.seq2seq.simple_decoder_fn_inference()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/simple_decoder_fn_inference)
+# and
+# [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder).
 
 # In[13]:
 
-def decoding_layer_infer(encoder_state, 
-                         dec_cell, 
-                         dec_embeddings, 
-                         start_of_sequence_id, 
+def decoding_layer_infer(encoder_state,
+                         dec_cell,
+                         dec_embeddings,
+                         start_of_sequence_id,
                          end_of_sequence_id,
-                         maximum_length, 
-                         vocab_size, 
-                         decoding_scope, 
-                         output_fn, 
+                         maximum_length,
+                         vocab_size,
+                         decoding_scope,
+                         output_fn,
                          keep_prob):
     """
     Create a decoding layer for inference
@@ -339,23 +366,23 @@ def decoding_layer_infer(encoder_state,
     :return: Inference Logits
     """
     decoder_fn = tf.contrib.seq2seq.simple_decoder_fn_inference(
-        output_fn, 
-        encoder_state, 
-        dec_embeddings, 
-        start_of_sequence_id, 
-        end_of_sequence_id, 
-        maximum_length, 
-        vocab_size) 
-    
+        output_fn,
+        encoder_state,
+        dec_embeddings,
+        start_of_sequence_id,
+        end_of_sequence_id,
+        maximum_length,
+        vocab_size)
+
     # We just need the outputs of the decoder, final_state, final_context_state
     # are not necessary here
     outputs, _, _ = tf.contrib.seq2seq.dynamic_rnn_decoder(
-        dec_cell, 
-        decoder_fn, 
+        dec_cell,
+        decoder_fn,
         scope=decoding_scope)
-    
+
     inference_logits = tf.contrib.layers.dropout(outputs, keep_prob)
-    
+
     return inference_logits
 
 
@@ -367,24 +394,26 @@ tests.test_decoding_layer_infer(decoding_layer_infer)
 
 # ### Build the Decoding Layer
 # Implement `decoding_layer()` to create a Decoder RNN layer.
-# 
+#
 # - Create RNN cell for decoding using `rnn_size` and `num_layers`.
 # - Create the output fuction using [`lambda`](https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions) to transform it's input, logits, to class logits.
 # - Use the your `decoding_layer_train(encoder_state, dec_cell, dec_embed_input, sequence_length, decoding_scope, output_fn, keep_prob)` function to get the training logits.
 # - Use your `decoding_layer_infer(encoder_state, dec_cell, dec_embeddings, start_of_sequence_id, end_of_sequence_id, maximum_length, vocab_size, decoding_scope, output_fn, keep_prob)` function to get the inference logits.
-# 
-# Note: You'll need to use [tf.variable_scope](https://www.tensorflow.org/api_docs/python/tf/variable_scope) to share variables between training and inference.
+#
+# Note: You'll need to use
+# [tf.variable_scope](https://www.tensorflow.org/api_docs/python/tf/variable_scope)
+# to share variables between training and inference.
 
 # In[14]:
 
-def decoding_layer(dec_embed_input, 
-                   dec_embeddings, 
-                   encoder_state, 
-                   vocab_size, 
-                   sequence_length, 
+def decoding_layer(dec_embed_input,
+                   dec_embeddings,
+                   encoder_state,
+                   vocab_size,
+                   sequence_length,
                    rnn_size,
-                   num_layers, 
-                   target_vocab_to_int, 
+                   num_layers,
+                   target_vocab_to_int,
                    keep_prob):
     """
     Create decoding layer
@@ -405,35 +434,36 @@ def decoding_layer(dec_embed_input,
     basic_cell = tf.contrib.rnn.BasicLSTMCell(rnn_size)
     dec_cell = tf.contrib.rnn.MultiRNNCell([basic_cell] * num_layers)
 
-    output_fn = lambda x: tf.contrib.layers.fully_connected(
-        x, 
+    def output_fn(x): return tf.contrib.layers.fully_connected(
+        x,
         vocab_size,
         scope=decoding_scope)
-    
+
     with tf.variable_scope("decoding") as decoding_scope:
         training_logits = decoding_layer_train(
-            encoder_state, 
-            dec_cell, 
-            dec_embed_input, 
-            sequence_length, 
-            decoding_scope, 
-            output_fn, 
+            encoder_state,
+            dec_cell,
+            dec_embed_input,
+            sequence_length,
+            decoding_scope,
+            output_fn,
             keep_prob)
 
     with tf.variable_scope("decoding", reuse=True) as decoding_scope:
-        inference_logits =  decoding_layer_infer(
-            encoder_state, 
-            dec_cell, 
-            dec_embeddings, 
-            start_id, 
-            end_id, 
-            sequence_length, 
-            vocab_size, 
-            decoding_scope, 
-            output_fn, 
+        inference_logits = decoding_layer_infer(
+            encoder_state,
+            dec_cell,
+            dec_embeddings,
+            start_id,
+            end_id,
+            sequence_length,
+            vocab_size,
+            decoding_scope,
+            output_fn,
             keep_prob)
-        
+
     return training_logits, inference_logits
+
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -443,7 +473,7 @@ tests.test_decoding_layer(decoding_layer)
 
 # ### Build the Neural Network
 # Apply the functions you implemented above to:
-# 
+#
 # - Apply embedding to the input data for the encoder.
 # - Encode the input using your `encoding_layer(rnn_inputs, rnn_size, num_layers, keep_prob)`.
 # - Process target data using your `process_decoding_input(target_data, target_vocab_to_int, batch_size)` function.
@@ -452,17 +482,17 @@ tests.test_decoding_layer(decoding_layer)
 
 # In[15]:
 
-def seq2seq_model(input_data, 
-                  target_data, 
-                  keep_prob, 
-                  batch_size, 
-                  sequence_length, 
-                  source_vocab_size, 
+def seq2seq_model(input_data,
+                  target_data,
+                  keep_prob,
+                  batch_size,
+                  sequence_length,
+                  source_vocab_size,
                   target_vocab_size,
-                  enc_embedding_size, 
-                  dec_embedding_size, 
-                  rnn_size, 
-                  num_layers, 
+                  enc_embedding_size,
+                  dec_embedding_size,
+                  rnn_size,
+                  num_layers,
                   target_vocab_to_int):
     """
     Build the Sequence-to-Sequence part of the neural network
@@ -480,36 +510,36 @@ def seq2seq_model(input_data,
     :param target_vocab_to_int: Dictionary to go from the target words to an id
     :return: Tuple of (Training Logits, Inference Logits)
     """
-    
+
     # Embed input data for feeding into encoder
     enc_embed_input = tf.contrib.layers.embed_sequence(
-        input_data, 
-        source_vocab_size, 
+        input_data,
+        source_vocab_size,
         enc_embedding_size)
-        
+
     # Encode the input using encoding layer and get the state
     encoder_state = encoding_layer(
-        enc_embed_input, 
-        rnn_size, 
-        num_layers, 
+        enc_embed_input,
+        rnn_size,
+        num_layers,
         keep_prob)
 
     # Process target data
     dec_input = process_decoding_input(
-        target_data, 
-        target_vocab_to_int, 
+        target_data,
+        target_vocab_to_int,
         batch_size)
-    
+
     # Apply embedding to the target data for the decoder
     dec_embeddings = tf.Variable(
         tf.random_uniform([target_vocab_size, dec_embedding_size]))
     dec_embed_input = tf.nn.embedding_lookup(
-        dec_embeddings, 
+        dec_embeddings,
         dec_input)
 
     # Decode the encoded input using your decoding_layer
     training_logits, inference_logits = decoding_layer(
-        dec_embed_input, 
+        dec_embed_input,
         dec_embeddings,
         encoder_state,
         target_vocab_size,
@@ -518,8 +548,9 @@ def seq2seq_model(input_data,
         num_layers,
         target_vocab_to_int,
         keep_prob)
-    
+
     return training_logits, inference_logits
+
 
 """
 DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
@@ -530,7 +561,7 @@ tests.test_seq2seq_model(seq2seq_model)
 # ## Neural Network Training
 # ### Hyperparameters
 # Tune the following parameters:
-# 
+#
 # - Set `epochs` to the number of epochs.
 # - Set `batch_size` to the batch size.
 # - Set `rnn_size` to the size of the RNNs.
@@ -568,31 +599,32 @@ keep_probability = 0.5
 DON'T MODIFY ANYTHING IN THIS CELL
 """
 save_path = 'checkpoints/dev'
-(source_int_text, target_int_text) = helper.load_preprocess()[0] 
+(source_int_text, target_int_text) = helper.load_preprocess()[0]
 (source_vocab_to_int, target_vocab_to_int) = helper.load_preprocess()[1]
-max_source_sentence_length = max([len(sentence) for sentence in source_int_text])
+max_source_sentence_length = max([len(sentence)
+                                  for sentence in source_int_text])
 
 train_graph = tf.Graph()
 with train_graph.as_default():
     input_data, targets, lr, keep_prob = model_inputs()
     sequence_length = tf.placeholder_with_default(
-        max_source_sentence_length, 
-        None, 
+        max_source_sentence_length,
+        None,
         name='sequence_length')
     input_shape = tf.shape(input_data)
-    
+
     train_logits, inference_logits = seq2seq_model(
-        tf.reverse(input_data, [-1]), 
-        targets, 
-        keep_prob, 
-        batch_size, 
-        sequence_length, 
-        len(source_vocab_to_int), 
+        tf.reverse(input_data, [-1]),
+        targets,
+        keep_prob,
+        batch_size,
+        sequence_length,
+        len(source_vocab_to_int),
         len(target_vocab_to_int),
-        encoding_embedding_size, 
-        decoding_embedding_size, 
-        rnn_size, 
-        num_layers, 
+        encoding_embedding_size,
+        decoding_embedding_size,
+        rnn_size,
+        num_layers,
         target_vocab_to_int)
 
     tf.identity(inference_logits, 'logits')
@@ -608,12 +640,15 @@ with train_graph.as_default():
 
         # Gradient Clipping
         gradients = optimizer.compute_gradients(cost)
-        capped_gradients = [(tf.clip_by_value(grad, -1., 1.), var) for grad, var in gradients if grad is not None]
+        capped_gradients = [(tf.clip_by_value(grad, -1., 1.), var)
+                            for grad, var in gradients if grad is not None]
         train_op = optimizer.apply_gradients(capped_gradients)
 
 
 # ### Train
-# Train the neural network on the preprocessed data. If you have a hard time getting a good loss, check the forms to see if anyone is having the same problem.
+# Train the neural network on the preprocessed data. If you have a hard
+# time getting a good loss, check the forms to see if anyone is having the
+# same problem.
 
 # In[21]:
 
@@ -621,6 +656,7 @@ with train_graph.as_default():
 DON'T MODIFY ANYTHING IN THIS CELL
 """
 import time
+
 
 def get_accuracy(target, logits):
     """
@@ -630,15 +666,16 @@ def get_accuracy(target, logits):
     if max_seq - target.shape[1]:
         target = np.pad(
             target,
-            [(0,0),(0,max_seq - target.shape[1])],
+            [(0, 0), (0, max_seq - target.shape[1])],
             'constant')
     if max_seq - logits.shape[1]:
         logits = np.pad(
             logits,
-            [(0,0),(0,max_seq - logits.shape[1]), (0,0)],
+            [(0, 0), (0, max_seq - logits.shape[1]), (0, 0)],
             'constant')
 
     return np.mean(np.equal(target, np.argmax(logits, 2)))
+
 
 train_source = source_int_text[batch_size:]
 train_target = target_int_text[batch_size:]
@@ -653,7 +690,7 @@ with tf.Session(graph=train_graph) as sess:
         for batch_i, (source_batch, target_batch) in enumerate(
                 helper.batch_data(train_source, train_target, batch_size)):
             start_time = time.time()
-            
+
             _, loss = sess.run(
                 [train_op, cost],
                 {input_data: source_batch,
@@ -661,22 +698,23 @@ with tf.Session(graph=train_graph) as sess:
                  lr: learning_rate,
                  sequence_length: target_batch.shape[1],
                  keep_prob: keep_probability})
-            
+
             batch_train_logits = sess.run(
                 inference_logits,
                 {input_data: source_batch, keep_prob: 1.0})
             batch_valid_logits = sess.run(
                 inference_logits,
                 {input_data: valid_source, keep_prob: 1.0})
-                
+
             train_acc = get_accuracy(target_batch, batch_train_logits)
-            valid_acc = get_accuracy(np.array(valid_target), batch_valid_logits)
+            valid_acc = get_accuracy(
+                np.array(valid_target), batch_valid_logits)
             end_time = time.time()
             print('Epoch {:>3} Batch {:>4}/{} - Train Accuracy: {:>6.3f}, Validation Accuracy: {:>6.3f}, Loss: {:>6.3f}'
-                  .format(epoch_i, batch_i, 
-                          len(source_int_text) // batch_size, 
-                          train_acc, 
-                          valid_acc, 
+                  .format(epoch_i, batch_i,
+                          len(source_int_text) // batch_size,
+                          train_acc,
+                          valid_acc,
                           loss))
 
     # Save Model
@@ -716,7 +754,7 @@ load_path = helper.load_params()
 
 # ## Sentence to Sequence
 # To feed a sentence into the model for translation, you first need to preprocess it.  Implement the function `sentence_to_seq()` to preprocess new sentences.
-# 
+#
 # - Convert the sentence to lowercase
 # - Convert words into ids using `vocab_to_int`
 #  - Convert words not in the vocabulary, to the `<UNK>` word id.
@@ -730,8 +768,9 @@ def sentence_to_seq(sentence, vocab_to_int):
     :param vocab_to_int: Dictionary to go from the words to an id
     :return: List of word ids
     """
-    #sentence = lower(sentence) 
-    word_id_list = [vocab_to_int.get(word, vocab_to_int['<UNK>']) for word in sentence.split()]
+    #sentence = lower(sentence)
+    word_id_list = [vocab_to_int.get(word, vocab_to_int['<UNK>'])
+                    for word in sentence.split()]
     return word_id_list
 
 
@@ -764,20 +803,28 @@ with tf.Session(graph=loaded_graph) as sess:
     logits = loaded_graph.get_tensor_by_name('logits:0')
     keep_prob = loaded_graph.get_tensor_by_name('keep_prob:0')
 
-    translate_logits = sess.run(logits, {input_data: [translate_sentence], keep_prob: 1.0})[0]
+    translate_logits = sess.run(
+        logits, {input_data: [translate_sentence], keep_prob: 1.0})[0]
 
 print('Input')
 print('  Word Ids:      {}'.format([i for i in translate_sentence]))
-print('  English Words: {}'.format([source_int_to_vocab[i] for i in translate_sentence]))
+print('  English Words: {}'.format(
+    [source_int_to_vocab[i] for i in translate_sentence]))
 
 print('\nPrediction')
-print('  Word Ids:      {}'.format([i for i in np.argmax(translate_logits, 1)]))
-print('  French Words: {}'.format([target_int_to_vocab[i] for i in np.argmax(translate_logits, 1)]))
+print('  Word Ids:      {}'.format(
+    [i for i in np.argmax(translate_logits, 1)]))
+print('  French Words: {}'.format(
+    [target_int_to_vocab[i] for i in np.argmax(translate_logits, 1)]))
 
 
 # ## Imperfect Translation
 # You might notice that some sentences translate better than others.  Since the dataset you're using only has a vocabulary of 227 English words of the thousands that you use, you're only going to see good results using these words.  For this project, you don't need a perfect translation. However, if you want to create a better translation model, you'll need better data.
-# 
+#
 # You can train on the [WMT10 French-English corpus](http://www.statmt.org/wmt10/training-giga-fren.tar).  This dataset has more vocabulary and richer in topics discussed.  However, this will take you days to train, so make sure you've a GPU and the neural network is performing well on dataset we provided.  Just make sure you play with the WMT10 corpus after you've submitted this project.
 # ## Submitting This Project
-# When submitting this project, make sure to run all the cells before saving the notebook. Save the notebook file as "dlnd_language_translation.ipynb" and save it as a HTML file under "File" -> "Download as". Include the "helper.py" and "problem_unittests.py" files in your submission.
+# When submitting this project, make sure to run all the cells before
+# saving the notebook. Save the notebook file as
+# "dlnd_language_translation.ipynb" and save it as a HTML file under
+# "File" -> "Download as". Include the "helper.py" and
+# "problem_unittests.py" files in your submission.

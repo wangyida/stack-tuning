@@ -1,7 +1,6 @@
 # Nodes Stacking and Graph Parsing for Deep Learning
 
-Copyright (c) 2017, Yida Wang
-All rights reserved.
+Copyright (c) 2017, Yida Wang All rights reserved.
 
 Use of this source code is governed by a BSD-style license that can be found in the LICENSE file.
 
@@ -20,6 +19,7 @@ class Node:
 ```
 
 Initiation for Class Nodes. Node's constructor (runs when the object is instantiated).
+
 ```python
     def __init__(self, inbound_nodes=[]):
         # A list of nodes with edges into this node.
@@ -40,11 +40,13 @@ Initiation for Class Nodes. Node's constructor (runs when the object is instanti
 ```
 
 Every node that uses this class as a base class will need to define its own `forward` method.
+
 ```python
     def forward(self):
 ```
 
 Every node that uses this class as a base class will need to define its own `backward` method.
+
 ```python
     def backward(self):
 ```
@@ -54,6 +56,7 @@ Every node that uses this class as a base class will need to define its own `bac
 Sort the nodes in topological order using Kahn's Algorithm.
 
 `feed_dict`: A dictionary where the key is a `Input` Node and the value is the respective value feed to that Node. This method returns a list of sorted nodes.
+
 ```python
 def topological_sort(feed_dict):
 ```
@@ -64,8 +67,8 @@ Updates the value of each trainable with SGD.
 
 Arguments:
 
-`trainables`: A list of `Input` Nodes representing weights/biases.
-`learning_rate`: The learning rate.
+`trainables`: A list of `Input` Nodes representing weights/biases. `learning_rate`: The learning rate.
+
 ```python
 def sgd_update(trainables, learning_rate=1e-2):
 ```

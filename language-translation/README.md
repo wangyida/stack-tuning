@@ -1,9 +1,10 @@
-
 # Language Translation
-In this project, you’re going to take a peek into the realm of neural network machine translation.  You’ll be training a sequence to sequence model on a dataset of English and French sentences that can translate new sentences from English to French.
-## Get the Data
-Since translating the whole language of English to French will take lots of time to train, we have provided you with a small portion of the English corpus.
 
+In this project, you're going to take a peek into the realm of neural network machine translation. You'll be training a sequence to sequence model on a dataset of English and French sentences that can translate new sentences from English to French.
+
+## Get the Data
+
+Since translating the whole language of English to French will take lots of time to train, we have provided you with a small portion of the English corpus.
 
 ```python
 """
@@ -19,8 +20,8 @@ target_text = helper.load_data(target_path)
 ```
 
 ## Explore the Data
-Play around with view_sentence_range to view different parts of the data.
 
+Play around with view_sentence_range to view different parts of the data.
 
 ```python
 view_sentence_range = (0, 10)
@@ -47,46 +48,50 @@ print('French sentences {} to {}:'.format(*view_sentence_range))
 print('\n'.join(target_text.split('\n')[view_sentence_range[0]:view_sentence_range[1]]))
 ```
 
-    Dataset Stats
-    Roughly the number of unique words: 227
-    Number of sentences: 137861
-    Average number of words in a sentence: 13.225277634719028
+```
+Dataset Stats
+Roughly the number of unique words: 227
+Number of sentences: 137861
+Average number of words in a sentence: 13.225277634719028
 
-    English sentences 0 to 10:
-    new jersey is sometimes quiet during autumn , and it is snowy in april .
-    the united states is usually chilly during july , and it is usually freezing in november .
-    california is usually quiet during march , and it is usually hot in june .
-    the united states is sometimes mild during june , and it is cold in september .
-    your least liked fruit is the grape , but my least liked is the apple .
-    his favorite fruit is the orange , but my favorite is the grape .
-    paris is relaxing during december , but it is usually chilly in july .
-    new jersey is busy during spring , and it is never hot in march .
-    our least liked fruit is the lemon , but my least liked is the grape .
-    the united states is sometimes busy during january , and it is sometimes warm in november .
+English sentences 0 to 10:
+new jersey is sometimes quiet during autumn , and it is snowy in april .
+the united states is usually chilly during july , and it is usually freezing in november .
+california is usually quiet during march , and it is usually hot in june .
+the united states is sometimes mild during june , and it is cold in september .
+your least liked fruit is the grape , but my least liked is the apple .
+his favorite fruit is the orange , but my favorite is the grape .
+paris is relaxing during december , but it is usually chilly in july .
+new jersey is busy during spring , and it is never hot in march .
+our least liked fruit is the lemon , but my least liked is the grape .
+the united states is sometimes busy during january , and it is sometimes warm in november .
 
-    French sentences 0 to 10:
-    new jersey est parfois calme pendant l' automne , et il est neigeux en avril .
-    les états-unis est généralement froid en juillet , et il gèle habituellement en novembre .
-    california est généralement calme en mars , et il est généralement chaud en juin .
-    les états-unis est parfois légère en juin , et il fait froid en septembre .
-    votre moins aimé fruit est le raisin , mais mon moins aimé est la pomme .
-    son fruit préféré est l'orange , mais mon préféré est le raisin .
-    paris est relaxant en décembre , mais il est généralement froid en juillet .
-    new jersey est occupé au printemps , et il est jamais chaude en mars .
-    notre fruit est moins aimé le citron , mais mon moins aimé est le raisin .
-    les états-unis est parfois occupé en janvier , et il est parfois chaud en novembre .
-
+French sentences 0 to 10:
+new jersey est parfois calme pendant l' automne , et il est neigeux en avril .
+les états-unis est généralement froid en juillet , et il gèle habituellement en novembre .
+california est généralement calme en mars , et il est généralement chaud en juin .
+les états-unis est parfois légère en juin , et il fait froid en septembre .
+votre moins aimé fruit est le raisin , mais mon moins aimé est la pomme .
+son fruit préféré est l'orange , mais mon préféré est le raisin .
+paris est relaxant en décembre , mais il est généralement froid en juillet .
+new jersey est occupé au printemps , et il est jamais chaude en mars .
+notre fruit est moins aimé le citron , mais mon moins aimé est le raisin .
+les états-unis est parfois occupé en janvier , et il est parfois chaud en novembre .
+```
 
 ## Implement Preprocessing Function
+
 ### Text to Word Ids
-As you did with other RNNs, you must turn the text into a number so the computer can understand it. In the function `text_to_ids()`, you'll turn `source_text` and `target_text` from words to ids.  However, you need to add the `<EOS>` word id at the end of each sentence from `target_text`.  This will help the neural network predict when the sentence should end.
+
+As you did with other RNNs, you must turn the text into a number so the computer can understand it. In the function `text_to_ids()`, you'll turn `source_text` and `target_text` from words to ids. However, you need to add the `<EOS>` word id at the end of each sentence from `target_text`. This will help the neural network predict when the sentence should end.
 
 You can get the `<EOS>` word id by doing:
+
 ```python
 target_vocab_to_int['<EOS>']
 ```
-You can get other word ids using `source_vocab_to_int` and `target_vocab_to_int`.
 
+You can get other word ids using `source_vocab_to_int` and `target_vocab_to_int`.
 
 ```python
 def text_to_ids(source_text,
@@ -121,12 +126,13 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_text_to_ids(text_to_ids)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ### Preprocess all the data and save it
-Running the code cell below will preprocess all the data and save it to file.
 
+Running the code cell below will preprocess all the data and save it to file.
 
 ```python
 """
@@ -136,8 +142,8 @@ helper.preprocess_and_save_data(source_path, target_path, text_to_ids)
 ```
 
 # Check Point
-This is your first checkpoint. If you ever decide to come back to this notebook or have to restart the notebook, you can start from here. The preprocessed data has been saved to disk.
 
+This is your first checkpoint. If you ever decide to come back to this notebook or have to restart the notebook, you can start from here. The preprocessed data has been saved to disk.
 
 ```python
 """
@@ -150,9 +156,9 @@ import helper
 (source_vocab_to_int, target_vocab_to_int) = helper.load_preprocess()[1]
 ```
 
-### Check the Version of TensorFlow and Access to GPU
-This will check to make sure you have the correct version of TensorFlow and access to a GPU
+## Check the Version of TensorFlow and Access to GPU
 
+This will check to make sure you have the correct version of TensorFlow and access to a GPU
 
 ```python
 """
@@ -178,14 +184,17 @@ else:
     print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
 ```
 
-    TensorFlow Version: 1.0.0
+```
+TensorFlow Version: 1.0.0
 
 
-    /usr/local/lib/python3.6/site-packages/ipykernel_launcher.py:19: UserWarning: No GPU found. Please use a GPU to train your neural network.
-
+/usr/local/lib/python3.6/site-packages/ipykernel_launcher.py:19: UserWarning: No GPU found. Please use a GPU to train your neural network.
+```
 
 ## Build the Neural Network
+
 You'll build the components necessary to build a Sequence-to-Sequence model by implementing the following functions below:
+
 - `model_inputs`
 - `process_decoding_input`
 - `encoding_layer`
@@ -195,6 +204,7 @@ You'll build the components necessary to build a Sequence-to-Sequence model by i
 - `seq2seq_model`
 
 ### Input
+
 Implement the `model_inputs()` function to create TF Placeholders for the Neural Network. It should create the following placeholders:
 
 - Input text placeholder named "input" using the TF Placeholder name parameter with rank 2.
@@ -203,7 +213,6 @@ Implement the `model_inputs()` function to create TF Placeholders for the Neural
 - Keep probability placeholder named "keep_prob" using the TF Placeholder name parameter with rank 0.
 
 Return the placeholders in the following the tuple (Input, Targets, Learing Rate, Keep Probability)
-
 
 ```python
 def model_inputs():
@@ -223,12 +232,13 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_model_inputs(model_inputs)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ### Process Decoding Input
-Implement `process_decoding_input` using TensorFlow to remove the last word id from each batch in `target_data` and concat the GO ID to the beginning of each batch.
 
+Implement `process_decoding_input` using TensorFlow to remove the last word id from each batch in `target_data` and concat the GO ID to the beginning of each batch.
 
 ```python
 def process_decoding_input(target_data,
@@ -265,12 +275,13 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_process_decoding_input(process_decoding_input)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ### Encoding
-Implement `encoding_layer()` to create a Encoder RNN layer using [`tf.nn.dynamic_rnn()`](https://www.tensorflow.org/api_docs/python/tf/nn/dynamic_rnn).
 
+Implement `encoding_layer()` to create a Encoder RNN layer using [`tf.nn.dynamic_rnn()`](https://www.tensorflow.org/api_docs/python/tf/nn/dynamic_rnn).
 
 ```python
 def encoding_layer(rnn_inputs,
@@ -306,12 +317,13 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_encoding_layer(encoding_layer)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ### Decoding - Training
-Create training logits using [`tf.contrib.seq2seq.simple_decoder_fn_train()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/simple_decoder_fn_train) and [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder).  Apply the `output_fn` to the [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder) outputs.
 
+Create training logits using [`tf.contrib.seq2seq.simple_decoder_fn_train()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/simple_decoder_fn_train) and [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder). Apply the `output_fn` to the [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder) outputs.
 
 ```python
 def decoding_layer_train(encoder_state,
@@ -355,12 +367,13 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_decoding_layer_train(decoding_layer_train)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ### Decoding - Inference
-Create inference logits using [`tf.contrib.seq2seq.simple_decoder_fn_inference()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/simple_decoder_fn_inference) and [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder).
 
+Create inference logits using [`tf.contrib.seq2seq.simple_decoder_fn_inference()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/simple_decoder_fn_inference) and [`tf.contrib.seq2seq.dynamic_rnn_decoder()`](https://www.tensorflow.org/versions/r1.0/api_docs/python/tf/contrib/seq2seq/dynamic_rnn_decoder).
 
 ```python
 def decoding_layer_infer(encoder_state,
@@ -414,10 +427,12 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_decoding_layer_infer(decoding_layer_infer)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ### Build the Decoding Layer
+
 Implement `decoding_layer()` to create a Decoder RNN layer.
 
 - Create RNN cell for decoding using `rnn_size` and `num_layers`.
@@ -426,7 +441,6 @@ Implement `decoding_layer()` to create a Decoder RNN layer.
 - Use your `decoding_layer_infer(encoder_state, dec_cell, dec_embeddings, start_of_sequence_id, end_of_sequence_id, maximum_length, vocab_size, decoding_scope, output_fn, keep_prob)` function to get the inference logits.
 
 Note: You'll need to use [tf.variable_scope](https://www.tensorflow.org/api_docs/python/tf/variable_scope) to share variables between training and inference.
-
 
 ```python
 def decoding_layer(dec_embed_input,
@@ -493,10 +507,12 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_decoding_layer(decoding_layer)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ### Build the Neural Network
+
 Apply the functions you implemented above to:
 
 - Apply embedding to the input data for the encoder.
@@ -504,7 +520,6 @@ Apply the functions you implemented above to:
 - Process target data using your `process_decoding_input(target_data, target_vocab_to_int, batch_size)` function.
 - Apply embedding to the target data for the decoder.
 - Decode the encoded input using your `decoding_layer(dec_embed_input, dec_embeddings, encoder_state, vocab_size, sequence_length, rnn_size, num_layers, target_vocab_to_int, keep_prob)`.
-
 
 ```python
 def seq2seq_model(input_data,
@@ -582,11 +597,14 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_seq2seq_model(seq2seq_model)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ## Neural Network Training
+
 ### Hyperparameters
+
 Tune the following parameters:
 
 - Set `epochs` to the number of epochs.
@@ -597,7 +615,6 @@ Tune the following parameters:
 - Set `decoding_embedding_size` to the size of the embedding for the decoder.
 - Set `learning_rate` to the learning rate.
 - Set `keep_probability` to the Dropout keep probability
-
 
 ```python
 # Number of Epochs
@@ -618,8 +635,8 @@ keep_probability = 0.5
 ```
 
 ### Build the Graph
-Build the graph using the neural network you implemented.
 
+Build the graph using the neural network you implemented.
 
 ```python
 """
@@ -671,8 +688,8 @@ with train_graph.as_default():
 ```
 
 ### Train
-Train the neural network on the preprocessed data. If you have a hard time getting a good loss, check the forms to see if anyone is having the same problem.
 
+Train the neural network on the preprocessed data. If you have a hard time getting a good loss, check the forms to see if anyone is having the same problem.
 
 ```python
 """
@@ -743,18 +760,20 @@ with tf.Session(graph=train_graph) as sess:
     print('Model Trained and Saved')
 ```
 
-    Epoch   0 Batch    0/538 - Train Accuracy:  0.234, Validation Accuracy:  0.316, Loss:  5.882
-    Epoch   0 Batch    1/538 - Train Accuracy:  0.231, Validation Accuracy:  0.316, Loss:  5.582
-    Epoch   0 Batch    2/538 - Train Accuracy:  0.252, Validation Accuracy:  0.316, Loss:  4.977
-    Epoch  14 Batch  534/538 - Train Accuracy:  0.959, Validation Accuracy:  0.936, Loss:  0.044
-    Epoch  14 Batch  535/538 - Train Accuracy:  0.962, Validation Accuracy:  0.941, Loss:  0.044
-    Epoch  14 Batch  536/538 - Train Accuracy:  0.961, Validation Accuracy:  0.941, Loss:  0.063
-    Model Trained and Saved
-
+```
+Epoch   0 Batch    0/538 - Train Accuracy:  0.234, Validation Accuracy:  0.316, Loss:  5.882
+Epoch   0 Batch    1/538 - Train Accuracy:  0.231, Validation Accuracy:  0.316, Loss:  5.582
+Epoch   0 Batch    2/538 - Train Accuracy:  0.252, Validation Accuracy:  0.316, Loss:  4.977
+...
+Epoch  14 Batch  534/538 - Train Accuracy:  0.959, Validation Accuracy:  0.936, Loss:  0.044
+Epoch  14 Batch  535/538 - Train Accuracy:  0.962, Validation Accuracy:  0.941, Loss:  0.044
+Epoch  14 Batch  536/538 - Train Accuracy:  0.961, Validation Accuracy:  0.941, Loss:  0.063
+Model Trained and Saved
+```
 
 ### Save Parameters
-Save the `batch_size` and `save_path` parameters for inference.
 
+Save the `batch_size` and `save_path` parameters for inference.
 
 ```python
 """
@@ -765,7 +784,6 @@ helper.save_params(save_path)
 ```
 
 # Checkpoint
-
 
 ```python
 """
@@ -782,12 +800,13 @@ load_path = helper.load_params()
 ```
 
 ## Sentence to Sequence
-To feed a sentence into the model for translation, you first need to preprocess it.  Implement the function `sentence_to_seq()` to preprocess new sentences.
+
+To feed a sentence into the model for translation, you first need to preprocess it. Implement the function `sentence_to_seq()` to preprocess new sentences.
 
 - Convert the sentence to lowercase
 - Convert words into ids using `vocab_to_int`
- - Convert words not in the vocabulary, to the `<UNK>` word id.
 
+  - Convert words not in the vocabulary, to the `<UNK>` word id.
 
 ```python
 def sentence_to_seq(sentence, vocab_to_int):
@@ -808,12 +827,13 @@ DON'T MODIFY ANYTHING IN THIS CELL THAT IS BELOW THIS LINE
 tests.test_sentence_to_seq(sentence_to_seq)
 ```
 
-    Tests Passed
-
+```
+Tests Passed
+```
 
 ## Translate
-This will translate `translate_sentence` from English to French.
 
+This will translate `translate_sentence` from English to French.
 
 ```python
 translate_sentence = 'he saw a old yellow truck on the street .'
@@ -845,18 +865,22 @@ print('  Word Ids:      {}'.format([i for i in np.argmax(translate_logits, 1)]))
 print('  French Words: {}'.format([target_int_to_vocab[i] for i in np.argmax(translate_logits, 1)]))
 ```
 
-    Input
-      Word Ids:      [80, 138, 142, 38, 23, 154, 2, 144, 2, 132]
-      English Words: ['he', 'saw', 'a', 'old', 'yellow', 'truck', '<UNK>', 'the', '<UNK>', '.']
+```
+Input
+  Word Ids:      [80, 138, 142, 38, 23, 154, 2, 144, 2, 132]
+  English Words: ['he', 'saw', 'a', 'old', 'yellow', 'truck', '<UNK>', 'the', '<UNK>', '.']
 
-    Prediction
-      Word Ids:      [165, 314, 46, 324, 349, 213, 131, 21, 312, 1]
-      French Words: ['il', 'envisage', 'de', 'visiter', 'les', 'états-unis', 'en', 'septembre', '.', '<EOS>']
-
+Prediction
+  Word Ids:      [165, 314, 46, 324, 349, 213, 131, 21, 312, 1]
+  French Words: ['il', 'envisage', 'de', 'visiter', 'les', 'états-unis', 'en', 'septembre', '.', '<EOS>']
+```
 
 ## Imperfect Translation
-You might notice that some sentences translate better than others.  Since the dataset you're using only has a vocabulary of 227 English words of the thousands that you use, you're only going to see good results using these words.  For this project, you don't need a perfect translation. However, if you want to create a better translation model, you'll need better data.
 
-You can train on the [WMT10 French-English corpus](http://www.statmt.org/wmt10/training-giga-fren.tar).  This dataset has more vocabulary and richer in topics discussed.  However, this will take you days to train, so make sure you've a GPU and the neural network is performing well on dataset we provided.  Just make sure you play with the WMT10 corpus after you've submitted this project.
+You might notice that some sentences translate better than others. Since the dataset you're using only has a vocabulary of 227 English words of the thousands that you use, you're only going to see good results using these words. For this project, you don't need a perfect translation. However, if you want to create a better translation model, you'll need better data.
+
+You can train on the [WMT10 French-English corpus](http://www.statmt.org/wmt10/training-giga-fren.tar). This dataset has more vocabulary and richer in topics discussed. However, this will take you days to train, so make sure you've a GPU and the neural network is performing well on dataset we provided. Just make sure you play with the WMT10 corpus after you've submitted this project.
+
 ## Submitting This Project
+
 When submitting this project, make sure to run all the cells before saving the notebook. Save the notebook file as "dlnd_language_translation.ipynb" and save it as a HTML file under "File" -> "Download as". Include the "helper.py" and "problem_unittests.py" files in your submission.

@@ -9,6 +9,7 @@
 
 import numpy as np
 
+
 class Node:
     """
     Base class for nodes in the network.
@@ -17,6 +18,7 @@ class Node:
 
         `inbound_nodes`: A list of nodes with edges into this node.
     """
+
     def __init__(self, inbound_nodes=[]):
         """
         Node's constructor (runs when the object is instantiated). Sets
@@ -57,6 +59,7 @@ class Input(Node):
     """
     A generic input into the network.
     """
+
     def __init__(self):
         # The base class constructor has to run to set all
         # the properties here.
@@ -79,10 +82,12 @@ class Input(Node):
         for n in self.outbound_nodes:
             self.gradients[self] += n.gradients[self]
 
+
 class Linear(Node):
     """
     Represents a node that performs a linear transform.
     """
+
     def __init__(self, X, W, b):
         # The base class (Node) constructor. Weights and bias
         # are treated like inbound nodes.
@@ -102,24 +107,29 @@ class Linear(Node):
         Calculates the gradient based on the output values.
         """
         # Initialize a partial for each of the inbound_nodes.
-        self.gradients = {n: np.zeros_like(n.value) for n in self.inbound_nodes}
+        self.gradients = {n: np.zeros_like(n.value)
+                          for n in self.inbound_nodes}
         # Cycle through the outputs. The gradient will change depending
         # on each output, so the gradients are summed over all outputs.
         for n in self.outbound_nodes:
             # Get the partial of the cost with respect to this node.
             grad_cost = n.gradients[self]
             # Set the partial of the loss with respect to this node's inputs.
-            self.gradients[self.inbound_nodes[0]] += np.dot(grad_cost, self.inbound_nodes[1].value.T)
+            self.gradients[self.inbound_nodes[0]
+                           ] += np.dot(grad_cost, self.inbound_nodes[1].value.T)
             # Set the partial of the loss with respect to this node's weights.
-            self.gradients[self.inbound_nodes[1]] += np.dot(self.inbound_nodes[0].value.T, grad_cost)
+            self.gradients[self.inbound_nodes[1]
+                           ] += np.dot(self.inbound_nodes[0].value.T, grad_cost)
             # Set the partial of the loss with respect to this node's bias.
-            self.gradients[self.inbound_nodes[2]] += np.sum(grad_cost, axis=0, keepdims=False)
+            self.gradients[self.inbound_nodes[2]
+                           ] += np.sum(grad_cost, axis=0, keepdims=False)
 
 
 class Sigmoid(Node):
     """
     Represents a node that performs the sigmoid activation function.
     """
+
     def __init__(self, node):
         # The base class constructor.
         Node.__init__(self, [node])
@@ -146,12 +156,14 @@ class Sigmoid(Node):
         the sigmoid function.
         """
         # Initialize the gradients to 0.
-        self.gradients = {n: np.zeros_like(n.value) for n in self.inbound_nodes}
+        self.gradients = {n: np.zeros_like(n.value)
+                          for n in self.inbound_nodes}
         # Sum the partial with respect to the input over all the outputs.
         for n in self.outbound_nodes:
             grad_cost = n.gradients[self]
             sigmoid = self.value
-            self.gradients[self.inbound_nodes[0]] += sigmoid * (1 - sigmoid) * grad_cost
+            self.gradients[self.inbound_nodes[0]] += sigmoid * \
+                (1 - sigmoid) * grad_cost
 
 
 class MSE(Node):

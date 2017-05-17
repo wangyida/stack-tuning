@@ -84,4 +84,4 @@ for i in range(epochs):
 
         loss += graph[-1].value
 
-    print("Epoch: {}, Loss: {:.3f}".format(i+1, loss/steps_per_epoch))
+    print("Epoch: {}, Loss: {:.3f}".format(i + 1, loss / steps_per_epoch))
